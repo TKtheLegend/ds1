@@ -239,9 +239,11 @@ function Dashboard() {
 
 // Home Component
 function Home() {
+  const [showSubtitle, setShowSubtitle] = useState(false);
+
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="text-center">
+    <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
+      <div className="text-center space-y-6">
         <div className="text-2xl md:text-3xl font-bold text-white">
           <Typewriter
             options={{
@@ -249,10 +251,32 @@ function Home() {
               autoStart: true,
               loop: false,
               delay: 80,
-              deleteSpeed: 9999999 // Effectively disables deletion
+              deleteSpeed: 9999999,
+              cursor: ''
+            }}
+            onInit={(typewriter) => {
+              typewriter
+                .callFunction(() => {
+                  setTimeout(() => setShowSubtitle(true), 1500);
+                })
+                .start();
             }}
           />
         </div>
+        {showSubtitle && (
+          <div className="text-lg md:text-xl text-zinc-300">
+            <Typewriter
+              options={{
+                strings: ['the first-ever meme media launchpad'],
+                autoStart: true,
+                loop: false,
+                delay: 50,
+                deleteSpeed: 9999999,
+                cursor: ''
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
