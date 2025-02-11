@@ -241,8 +241,8 @@ function Dashboard() {
 function Home() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="text-center space-y-8">
-        <div className="text-4xl md:text-6xl font-bold text-white">
+      <div className="text-center">
+        <div className="text-2xl md:text-3xl font-bold text-white">
           <Typewriter
             options={{
               strings: ['Welcome to Meme Syndicate'],
@@ -252,14 +252,6 @@ function Home() {
               deleteSpeed: 9999999 // Effectively disables deletion
             }}
           />
-        </div>
-        <div className="opacity-0 animate-fade-in delay-[2000ms]">
-          <Link 
-            to="/dashboard" 
-            className="inline-block bg-[#1a5c7e] hover:bg-[#1d6b93] text-white font-bold py-3 px-6 rounded transition-colors"
-          >
-            View Dashboard
-          </Link>
         </div>
       </div>
     </div>
