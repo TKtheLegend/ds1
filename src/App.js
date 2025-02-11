@@ -239,7 +239,7 @@ function Dashboard() {
 
 // Home Component
 function Home() {
-  const [showSubtitle, setShowSubtitle] = useState(false);
+  const [titleComplete, setTitleComplete] = useState(false);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
@@ -257,13 +257,13 @@ function Home() {
             onInit={(typewriter) => {
               typewriter
                 .callFunction(() => {
-                  setTimeout(() => setShowSubtitle(true), 1500);
+                  setTitleComplete(true);
                 })
                 .start();
             }}
           />
         </div>
-        {showSubtitle && (
+        {titleComplete && (
           <div className="text-lg md:text-xl text-zinc-300">
             <Typewriter
               options={{
@@ -319,7 +319,7 @@ function Navigation() {
                 location.pathname === '/dashboard' ? 'text-white bg-zinc-800' : 'text-zinc-300 hover:text-white hover:bg-zinc-800'
               }`}
             >
-              DASHBOARD
+              DEADSTOOL
             </Link>
           </div>
         </div>
@@ -352,7 +352,7 @@ function Navigation() {
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                DASHBOARD
+                DEADSTOOL
               </Link>
             </div>
           </div>
