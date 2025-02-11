@@ -150,7 +150,7 @@ function App() {
                 <div className="p-4">
                   {!imageError.profile ? (
                     <img 
-                      src="/deadstool-stars.PNG"
+                      src="/deadstool-stars.png"
                       alt="Deadpool" 
                       className="w-full rounded"
                       onError={() => handleImageError('profile')}
