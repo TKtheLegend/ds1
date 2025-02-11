@@ -252,7 +252,7 @@ function Home() {
         <div className="absolute inset-0 bg-black/80"></div>
         <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
           <div className="text-center space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold text-white">Welcome to DEADSTOOL</h1>
+            <h1 className="text-4xl md:text-6xl font-bold text-white">Welcome to Meme Syndicate</h1>
             <p className="text-xl text-zinc-300">The Ultimate Memecoin Experience</p>
             <div className="space-x-4">
               <Link 
