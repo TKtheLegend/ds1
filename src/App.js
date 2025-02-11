@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
+import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 
 // Dashboard Component (previously main content)
@@ -239,30 +240,26 @@ function Dashboard() {
 // Home Component
 function Home() {
   return (
-    <div className="min-h-screen relative">
-      <div 
-        className="min-h-screen relative"
-        style={{
-          backgroundImage: 'url("/deadstool-bg.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <div className="absolute inset-0 bg-black/80"></div>
-        <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-          <div className="text-center space-y-6">
-            <h1 className="text-4xl md:text-6xl font-bold text-white">Welcome to Meme Syndicate</h1>
-            <p className="text-xl text-zinc-300">The Ultimate Memecoin Experience</p>
-            <div className="space-x-4">
-              <Link 
-                to="/dashboard" 
-                className="inline-block bg-[#1a5c7e] hover:bg-[#1d6b93] text-white font-bold py-3 px-6 rounded transition-colors"
-              >
-                View Dashboard
-              </Link>
-            </div>
-          </div>
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="text-center space-y-8">
+        <div className="text-4xl md:text-6xl font-bold text-white">
+          <Typewriter
+            options={{
+              strings: ['Welcome to Meme Syndicate'],
+              autoStart: true,
+              loop: false,
+              delay: 80,
+              deleteSpeed: 9999999 // Effectively disables deletion
+            }}
+          />
+        </div>
+        <div className="opacity-0 animate-fade-in delay-[2000ms]">
+          <Link 
+            to="/dashboard" 
+            className="inline-block bg-[#1a5c7e] hover:bg-[#1d6b93] text-white font-bold py-3 px-6 rounded transition-colors"
+          >
+            View Dashboard
+          </Link>
         </div>
       </div>
     </div>
