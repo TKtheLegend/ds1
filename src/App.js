@@ -8,7 +8,13 @@ import axios from 'axios';
 // Home Component
 function Home() {
   const [showSubtitle, setShowSubtitle] = useState(false);
-  const [coinData, setCoinData] = useState({
+  const [wolfData, setWolfData] = useState({
+    price: 0,
+    marketCap: 0,
+    volume24h: 0,
+    priceChange24h: 0,
+  });
+  const [deadstoolData, setDeadstoolData] = useState({
     price: 0,
     marketCap: 0,
     volume24h: 0,
@@ -16,18 +22,33 @@ function Home() {
   });
 
   useEffect(() => {
-    const fetchCoinData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(
+        // Fetch WOLF data
+        const wolfResponse = await axios.get(
           `https://api.dexscreener.com/latest/dex/tokens/2MF1XwadG6EShbroYitXzydND5YjHkz6pGdFUKkepump`
         );
-        const pairData = response.data.pairs?.[0];
-        if (pairData) {
-          setCoinData({
-            price: parseFloat(pairData.priceUsd) || 0,
-            marketCap: parseFloat(pairData.fdv) || 0,
-            volume24h: parseFloat(pairData.volume.h24) || 0,
-            priceChange24h: parseFloat(pairData.priceChange.h24) || 0
+        const wolfPairData = wolfResponse.data.pairs?.[0];
+        if (wolfPairData) {
+          setWolfData({
+            price: parseFloat(wolfPairData.priceUsd) || 0,
+            marketCap: parseFloat(wolfPairData.fdv) || 0,
+            volume24h: parseFloat(wolfPairData.volume.h24) || 0,
+            priceChange24h: parseFloat(wolfPairData.priceChange.h24) || 0
+          });
+        }
+
+        // Fetch DEADSTOOL data
+        const deadstoolResponse = await axios.get(
+          `https://api.dexscreener.com/latest/dex/tokens/3cc8hXHqZdvsbvw5azbLdk4Rxse1KERtL4HaquDVpump`
+        );
+        const deadstoolPairData = deadstoolResponse.data.pairs?.[0];
+        if (deadstoolPairData) {
+          setDeadstoolData({
+            price: parseFloat(deadstoolPairData.priceUsd) || 0,
+            marketCap: parseFloat(deadstoolPairData.fdv) || 0,
+            volume24h: parseFloat(deadstoolPairData.volume.h24) || 0,
+            priceChange24h: parseFloat(deadstoolPairData.priceChange.h24) || 0
           });
         }
       } catch (error) {
@@ -35,8 +56,8 @@ function Home() {
       }
     };
 
-    fetchCoinData();
-    const interval = setInterval(fetchCoinData, 3000);
+    fetchData();
+    const interval = setInterval(fetchData, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -161,26 +182,26 @@ function Home() {
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Price</h3>
-                    <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
+                    <p className="text-base tracking-wide font-light">{formatPrice(wolfData.price)}</p>
                   </div>
                 </div>
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Market Cap</h3>
-                    <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
+                    <p className="text-base tracking-wide font-light">{formatLargeNumber(wolfData.marketCap)}</p>
                   </div>
                 </div>
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">All Time Volume</h3>
-                    <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
+                    <p className="text-base tracking-wide font-light">{formatLargeNumber(wolfData.volume24h)}</p>
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Change</h3>
-                    <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {coinData.priceChange24h.toFixed(2)}%
+                    <p className={`text-base tracking-wide font-light ${wolfData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {wolfData.priceChange24h.toFixed(2)}%
                     </p>
                   </div>
                 </div>
@@ -209,26 +230,26 @@ function Home() {
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Price</h3>
-                    <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
+                    <p className="text-base tracking-wide font-light">{formatPrice(deadstoolData.price)}</p>
                   </div>
                 </div>
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Market Cap</h3>
-                    <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
+                    <p className="text-base tracking-wide font-light">{formatLargeNumber(deadstoolData.marketCap)}</p>
                   </div>
                 </div>
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">All Time Volume</h3>
-                    <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
+                    <p className="text-base tracking-wide font-light">{formatLargeNumber(deadstoolData.volume24h)}</p>
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center px-3 py-2">
                     <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Change</h3>
-                    <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {coinData.priceChange24h.toFixed(2)}%
+                    <p className={`text-base tracking-wide font-light ${deadstoolData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {deadstoolData.priceChange24h.toFixed(2)}%
                     </p>
                   </div>
                 </div>
