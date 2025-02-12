@@ -395,18 +395,14 @@ function Home() {
 
             {/* Profile Image Section */}
             <div className="bg-[#141414] p-4 flex flex-col items-center justify-center border-l border-zinc-800 md:border-l md:border-t-0 border-t">
-              {!imageError ? (
+              <div className="w-48 h-48 rounded-lg overflow-hidden">
                 <img 
                   src="/deadstool-stars.png"
                   alt="Deadstool" 
-                  className="w-48 h-48 rounded-lg object-cover"
+                  className="w-full h-full object-cover"
                   onError={handleImageError}
                 />
-              ) : (
-                <div className="w-48 h-48 bg-[#1a1a1a] rounded-lg flex items-center justify-center">
-                  <p className="text-zinc-600">Image Loading Error</p>
-                </div>
-              )}
+              </div>
               <h2 className="text-2xl font-semibold tracking-wider text-center mt-3 text-zinc-200">$DEADSTOOL</h2>
               <a
                 href="https://t.me/+Lk-Z9dZIpr1jYmY5#"
