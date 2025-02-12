@@ -240,12 +240,18 @@ function Dashboard() {
 // Home Component
 function Home() {
   const [showSubtitle, setShowSubtitle] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [coinData, setCoinData] = useState({
     price: 0,
     marketCap: 0,
     volume24h: 0,
     priceChange24h: 0,
   });
+
+  const handleImageError = () => {
+    console.error('Failed to load profile image');
+    setImageError(true);
+  };
 
   useEffect(() => {
     const fetchCoinData = async () => {
@@ -389,11 +395,18 @@ function Home() {
 
             {/* Profile Image Section */}
             <div className="bg-[#141414] p-4 flex flex-col items-center justify-center border-l border-zinc-800 md:border-l md:border-t-0 border-t">
-              <img 
-                src="/deadstool-stars.png"
-                alt="Deadstool" 
-                className="w-48 h-48 rounded-lg object-cover"
-              />
+              {!imageError ? (
+                <img 
+                  src="/deadstool-stars.png"
+                  alt="Deadstool" 
+                  className="w-48 h-48 rounded-lg object-cover"
+                  onError={handleImageError}
+                />
+              ) : (
+                <div className="w-48 h-48 bg-[#1a1a1a] rounded-lg flex items-center justify-center">
+                  <p className="text-zinc-600">Image Loading Error</p>
+                </div>
+              )}
               <h2 className="text-2xl font-semibold tracking-wider text-center mt-3 text-zinc-200">$DEADSTOOL</h2>
               <a
                 href="https://t.me/+Lk-Z9dZIpr1jYmY5#"
