@@ -173,7 +173,7 @@ function Home() {
                 </div>
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Volume</h3>
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">All Time Volume</h3>
                     <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
                   </div>
                 </div>
@@ -221,7 +221,7 @@ function Home() {
                 </div>
                 <div className="border-b border-zinc-800/50">
                   <div className="flex items-center px-3 py-2">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Volume</h3>
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">All Time Volume</h3>
                     <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
                   </div>
                 </div>
