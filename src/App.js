@@ -240,10 +240,75 @@ function Dashboard() {
 // Home Component
 function Home() {
   const [showSubtitle, setShowSubtitle] = useState(false);
+  const [coinData, setCoinData] = useState({
+    price: 0,
+    marketCap: 0,
+    volume24h: 0,
+    priceChange24h: 0,
+  });
+
+  useEffect(() => {
+    const fetchCoinData = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.dexscreener.com/latest/dex/tokens/3cc8hXHqZdvsbvw5azbLdk4Rxse1KERtL4HaquDVpump`
+        );
+        const pairData = response.data.pairs?.[0];
+        if (pairData) {
+          setCoinData({
+            price: parseFloat(pairData.priceUsd) || 0,
+            marketCap: parseFloat(pairData.fdv) || 0,
+            volume24h: parseFloat(pairData.volume.h24) || 0,
+            priceChange24h: parseFloat(pairData.priceChange.h24) || 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching token data:', error);
+      }
+    };
+
+    fetchCoinData();
+    const interval = setInterval(fetchCoinData, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatPrice = (price) => {
+    if (typeof price !== 'number' || isNaN(price)) return '$0.00';
+    if (price < 0.00001) {
+      return `$${price.toExponential(6)}`;
+    }
+    if (price < 1) {
+      return price.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 8,
+        maximumFractionDigits: 8
+      });
+    }
+    return price.toLocaleString(undefined, {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 6
+    });
+  };
+
+  const formatLargeNumber = (num) => {
+    if (num >= 1000000000) {
+      return `$${(num / 1000000000).toFixed(2)}B`;
+    }
+    if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(2)}M`;
+    }
+    if (num >= 1000) {
+      return `$${(num / 1000).toFixed(2)}K`;
+    }
+    return `$${num.toFixed(2)}`;
+  };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
-      <div className="text-center space-y-8">
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center -mt-16">
+      <div className="text-center space-y-8 mb-16">
         <div className="space-y-6">
           <div className="text-2xl md:text-3xl font-bold text-white">
             <Typewriter
@@ -282,6 +347,41 @@ function Home() {
               />
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Coin Statistics */}
+      <div className="w-full max-w-md px-4">
+        <div className="bg-[#1a1a1a] rounded border border-zinc-800">
+          <h2 className="text-sm uppercase tracking-wider p-3 text-zinc-400 font-semibold border-b border-zinc-800">Live Stats</h2>
+          <div>
+            <div className="border-b border-zinc-800/50">
+              <div className="flex justify-between items-center px-3 py-2.5">
+                <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">Price</h3>
+                <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
+              </div>
+            </div>
+            <div className="border-b border-zinc-800/50">
+              <div className="flex justify-between items-center px-3 py-2.5">
+                <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">Market Cap</h3>
+                <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
+              </div>
+            </div>
+            <div className="border-b border-zinc-800/50">
+              <div className="flex justify-between items-center px-3 py-2.5">
+                <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">24h Volume</h3>
+                <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between items-center px-3 py-2.5">
+                <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">24h Change</h3>
+                <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {coinData.priceChange24h.toFixed(2)}%
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
