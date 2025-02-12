@@ -5,238 +5,6 @@ import { Menu, Transition } from '@headlessui/react';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 
-// Dashboard Component (previously main content)
-function Dashboard() {
-  const [coinData, setCoinData] = useState({
-    price: 0,
-    marketCap: 0,
-    volume24h: 0,
-    priceChange24h: 0,
-  });
-
-  const [imageError, setImageError] = useState({
-    banner: false,
-    profile: false
-  });
-
-  const handleImageError = (type) => {
-    console.error(`Failed to load ${type} image`);
-    setImageError(prev => ({ ...prev, [type]: true }));
-  };
-
-  useEffect(() => {
-    // Load Twitter widget script
-    const script = document.createElement("script");
-    script.src = "https://platform.twitter.com/widgets.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchCoinData = async () => {
-      try {
-        // Fetch token data from DexScreener API
-        const response = await axios.get(
-          `https://api.dexscreener.com/latest/dex/tokens/3cc8hXHqZdvsbvw5azbLdk4Rxse1KERtL4HaquDVpump`
-        );
-
-        // Log raw response for debugging
-        console.log('Raw API response:', response.data);
-
-        // Get the first pair data (usually the most liquid one)
-        const pairData = response.data.pairs?.[0];
-
-        if (!pairData) {
-          throw new Error('Token pair data not found');
-        }
-
-        setCoinData({
-          price: parseFloat(pairData.priceUsd) || 0,
-          marketCap: parseFloat(pairData.fdv) || 0, // Using FDV (Fully Diluted Valuation)
-          volume24h: parseFloat(pairData.volume.h24) || 0,
-          priceChange24h: parseFloat(pairData.priceChange.h24) || 0
-        });
-
-        // Log processed data
-        console.log('Processed pair data:', pairData);
-
-      } catch (error) {
-        console.error('Error fetching token data:', error);
-        // Log the full error and response data for debugging
-        console.log('Detailed error:', {
-          message: error.message,
-          responseData: error.response?.data,
-          status: error.response?.status,
-          rawError: error
-        });
-      }
-    };
-
-    fetchCoinData();
-    // Update every 3 seconds
-    const interval = setInterval(fetchCoinData, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Format number to handle very small values with more precision
-  const formatPrice = (price) => {
-    if (typeof price !== 'number' || isNaN(price)) return '$0.00';
-    if (price < 0.00001) {
-      return `$${price.toExponential(6)}`;
-    }
-    if (price < 1) {
-      return price.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 8,
-        maximumFractionDigits: 8
-      });
-    }
-    return price.toLocaleString(undefined, {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 6
-    });
-  };
-
-  // Format market cap and volume to use K, M, B suffixes
-  const formatLargeNumber = (num) => {
-    if (num >= 1000000000) {
-      return `$${(num / 1000000000).toFixed(2)}B`;
-    }
-    if (num >= 1000000) {
-      return `$${(num / 1000000).toFixed(2)}M`;
-    }
-    if (num >= 1000) {
-      return `$${(num / 1000).toFixed(2)}K`;
-    }
-    return `$${num.toFixed(2)}`;
-  };
-
-  return (
-    <div className="min-h-screen relative">
-      <div 
-        className="min-h-screen relative"
-        style={{
-          backgroundImage: 'url("/deadstool-bg.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <div className="absolute inset-0 bg-black/80"></div>
-        <div className="container mx-auto px-4 py-6 max-w-4xl relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6">
-            <div className="space-y-6">
-              {/* Deadpool Image */}
-              <div className="bg-[#1a1a1a] rounded border border-zinc-800">
-                <div className="p-4">
-                  {!imageError.profile ? (
-                    <img 
-                      src="/deadstool-stars.png"
-                      alt="Deadpool" 
-                      className="w-full rounded"
-                      onError={() => handleImageError('profile')}
-                    />
-                  ) : (
-                    <div className="w-full aspect-square bg-[#141414] rounded flex items-center justify-center">
-                      <p className="text-zinc-600">Image Loading Error</p>
-                    </div>
-                  )}
-                  <h2 className="text-2xl font-semibold tracking-wider text-center mt-3 text-zinc-200">$DEADSTOOL</h2>
-                </div>
-              </div>
-
-              {/* Coin Statistics */}
-              <div className="bg-[#1a1a1a] rounded border border-zinc-800">
-                <h2 className="text-sm uppercase tracking-wider p-3 text-zinc-400 font-semibold border-b border-zinc-800">Live Stats</h2>
-                <div>
-                  <div className="border-b border-zinc-800/50">
-                    <div className="flex justify-between items-center px-3 py-2.5">
-                      <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">Price</h3>
-                      <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-zinc-800/50">
-                    <div className="flex justify-between items-center px-3 py-2.5">
-                      <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">Market Cap</h3>
-                      <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
-                    </div>
-                  </div>
-                  <div className="border-b border-zinc-800/50">
-                    <div className="flex justify-between items-center px-3 py-2.5">
-                      <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">24h Volume</h3>
-                      <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between items-center px-3 py-2.5">
-                      <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">24h Change</h3>
-                      <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        {coinData.priceChange24h.toFixed(2)}%
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div className="space-y-6">
-              {/* Telegram Link */}
-              <div className="bg-[#1a1a1a] rounded border border-zinc-800">
-                <div className="p-4">
-                  <a
-                    href="https://t.me/+Lk-Z9dZIpr1jYmY5#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center space-x-2 bg-[#1a5c7e] hover:bg-[#1d6b93] transition-colors rounded py-3 px-4"
-                  >
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.015-.15-.056-.212s-.041-.041-.248-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.751-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.14.119.098.152.228.166.331.015.109.034.318.02.49z"/>
-                    </svg>
-                    <span className="font-semibold text-lg">Join our Telegram Community</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Twitter Feed */}
-              <div className="bg-[#1a1a1a] rounded border border-zinc-800">
-                <h2 className="text-sm uppercase tracking-wider p-3 text-zinc-400 font-semibold border-b border-zinc-800">Latest Updates</h2>
-                <div className="h-[425px] overflow-hidden bg-[#1a1a1a]">
-                  <TwitterTimelineEmbed
-                    sourceType="profile"
-                    screenName="deadstool__"
-                    options={{
-                      height: 425,
-                      theme: 'dark',
-                      dnt: true,
-                      cards: 'hidden'
-                    }}
-                    placeholder="Loading Timeline..."
-                    autoHeight={false}
-                    theme="dark"
-                    borderColor="#27272a"
-                    noScrollbar
-                    transparent
-                    key="deadstool-timeline"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // Home Component
 function Home() {
   const [showSubtitle, setShowSubtitle] = useState(false);
@@ -313,7 +81,7 @@ function Home() {
           <div className="text-2xl md:text-3xl font-bold text-white">
             <Typewriter
               options={{
-                strings: ['Welcome to Meme Syndicate'],
+                strings: ['Welcome to MemeVault.'],
                 autoStart: true,
                 loop: false,
                 delay: 80,
@@ -321,7 +89,7 @@ function Home() {
               }}
               onInit={(typewriter) => {
                 typewriter
-                  .typeString('Welcome to Meme Syndicate')
+                  .typeString('Welcome to MemeVault.')
                   .callFunction(() => {
                     setShowSubtitle(true);
                   })
@@ -347,37 +115,71 @@ function Home() {
               />
             </div>
           )}
+          {/* Adding Telegram Button */}
+          <div className="mt-8 overflow-hidden">
+            <a
+              href="https://t.me/+Lk-Z9dZIpr1jYmY5#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 bg-zinc-800 hover:bg-zinc-700 transition-colors rounded-lg py-3 px-6 text-white animate-pulse-glow"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.015-.15-.056-.212s-.041-.041-.248-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.751-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.14.119.098.152.228.166.331.015.109.034.318.02.49z"/>
+              </svg>
+              <span className="font-semibold text-lg">Join our Telegram</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Coin Card */}
-      <div className="w-full max-w-4xl px-4">
-        <div className="bg-[#1a1a1a] rounded-lg border border-zinc-800 overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4">
-            {/* Stats Section */}
-            <div>
-              <div className="p-4">
+      {/* Cards Container */}
+      <div className="flex flex-wrap justify-center gap-6 w-full px-4">
+        {/* $WOLF Card */}
+        <a 
+          className="w-full max-w-md transform transition-transform duration-300 hover:scale-105 cursor-pointer relative"
+        >
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-xl z-10 flex items-center justify-center">
+            <h2 className="text-2xl font-bold text-white tracking-wider">COMING SOON</h2>
+          </div>
+          <div className="bg-[#1a1a1a] rounded-lg border border-zinc-800 overflow-hidden animate-pulse-glow blur-lg">
+            <div className="flex items-center justify-between border-b border-zinc-800">
+              <h2 className="text-sm uppercase tracking-wider px-3 py-2 text-zinc-400 font-semibold">Live Stats</h2>
+              <h2 className="text-sm uppercase tracking-wider px-3 py-2 text-zinc-200 font-semibold">$WOLF (STOOLVERINE)</h2>
+            </div>
+            <div className="flex items-stretch">
+              <div className="w-32 border-r border-zinc-800/50">
                 <img 
-                  src="/deadstool-stars.png"
-                  alt="Deadstool" 
-                  className="w-48 h-48 mx-auto rounded-lg mb-4"
+                  src="/images/wolf-stars.png" 
+                  alt="Wolf" 
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    console.error('Failed to load Wolf image');
+                    e.target.src = '/deadstool-stars.png';
+                  }}
                 />
-                <h2 className="text-2xl font-semibold tracking-wider text-center mb-4 text-zinc-200">$DEADSTOOL</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-[#141414] rounded p-3">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">Price</h3>
+              </div>
+              <div className="flex-1 pl-4">
+                <div className="border-b border-zinc-800/50">
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Price</h3>
                     <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
                   </div>
-                  <div className="bg-[#141414] rounded p-3">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">Market Cap</h3>
+                </div>
+                <div className="border-b border-zinc-800/50">
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Market Cap</h3>
                     <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
                   </div>
-                  <div className="bg-[#141414] rounded p-3">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">24h Volume</h3>
+                </div>
+                <div className="border-b border-zinc-800/50">
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Volume</h3>
                     <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
                   </div>
-                  <div className="bg-[#141414] rounded p-3">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">24h Change</h3>
+                </div>
+                <div>
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Change</h3>
                     <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                       {coinData.priceChange24h.toFixed(2)}%
                     </p>
@@ -386,7 +188,55 @@ function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </a>
+
+        {/* $DEADSTOOL Card */}
+        <a 
+          href="https://dexscreener.com/solana/3cc8hXHqZdvsbvw5azbLdk4Rxse1KERtL4HaquDVpump"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full max-w-md transform transition-transform duration-300 hover:scale-105 cursor-pointer"
+        >
+          <div className="bg-[#1a1a1a] rounded-lg border border-zinc-800 overflow-hidden animate-pulse-glow">
+            <div className="flex items-center justify-between border-b border-zinc-800">
+              <h2 className="text-sm uppercase tracking-wider px-3 py-2 text-zinc-400 font-semibold">Live Stats</h2>
+              <h2 className="text-sm uppercase tracking-wider px-3 py-2 text-zinc-200 font-semibold">$DEADSTOOL</h2>
+            </div>
+            <div className="flex items-stretch">
+              <div className="w-32 border-r border-zinc-800/50">
+                <img src="/deadstool-stars.png" alt="Deadstool" className="h-full w-full object-cover" />
+              </div>
+              <div className="flex-1 pl-4">
+                <div className="border-b border-zinc-800/50">
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Price</h3>
+                    <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
+                  </div>
+                </div>
+                <div className="border-b border-zinc-800/50">
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">Market Cap</h3>
+                    <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
+                  </div>
+                </div>
+                <div className="border-b border-zinc-800/50">
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Volume</h3>
+                    <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center px-3 py-2">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mr-auto">24h Change</h3>
+                    <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {coinData.priceChange24h.toFixed(2)}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   );
@@ -423,14 +273,6 @@ function Navigation() {
             >
               HOME
             </Link>
-            <Link
-              to="/dashboard"
-              className={`px-3 py-2 rounded-md text-sm font-medium ${
-                location.pathname === '/dashboard' ? 'text-white bg-zinc-800' : 'text-zinc-300 hover:text-white hover:bg-zinc-800'
-              }`}
-            >
-              DEADSTOOL
-            </Link>
           </div>
         </div>
 
@@ -455,15 +297,6 @@ function Navigation() {
               >
                 HOME
               </Link>
-              <Link
-                to="/dashboard"
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  location.pathname === '/dashboard' ? 'text-white bg-zinc-800' : 'text-zinc-300 hover:text-white hover:bg-zinc-800'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                DEADSTOOL
-              </Link>
             </div>
           </div>
         </Transition>
@@ -480,7 +313,6 @@ function App() {
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <footer className="bg-[#1a1a1a] border-t border-zinc-800 p-2.5 mt-6">
           <p className="text-center text-zinc-600 text-[11px] uppercase tracking-widest">© 2024 DEADSTOOL · Maximum Effort!</p>

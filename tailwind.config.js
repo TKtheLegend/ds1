@@ -6,15 +6,19 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {
-        'fade-in': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        'pulse-glow': {
+          '0%, 100%': {
+            'box-shadow': '0 0 25px 3px rgba(255, 255, 255, 0.15)',
+          },
+          '50%': {
+            'box-shadow': '0 0 35px 6px rgba(255, 255, 255, 0.3)',
+          },
         }
       },
       animation: {
-        'fade-in': 'fade-in 1s ease-out forwards',
-      }
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
-} 
+}
