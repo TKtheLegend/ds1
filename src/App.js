@@ -314,6 +314,17 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center -mt-16">
+      {/* Profile Image */}
+      <div className="mb-8">
+        <div className="w-64 h-64 rounded-lg overflow-hidden">
+          <img 
+            src="/deadstool-stars.png"
+            alt="Deadstool" 
+            className="w-full h-full object-contain"
+          />
+        </div>
+      </div>
+
       <div className="text-center space-y-8 mb-16">
         <div className="space-y-6">
           <div className="text-2xl md:text-3xl font-bold text-white">
