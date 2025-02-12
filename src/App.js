@@ -240,7 +240,6 @@ function Dashboard() {
 // Home Component
 function Home() {
   const [showSubtitle, setShowSubtitle] = useState(false);
-  const [showList, setShowList] = useState(false);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
@@ -278,31 +277,6 @@ function Home() {
                 onInit={(typewriter) => {
                   typewriter
                     .typeString('the first-ever meme media launchpad')
-                    .callFunction(() => {
-                      setShowList(true);
-                    })
-                    .start();
-                }}
-              />
-            </div>
-          )}
-          {showList && (
-            <div className="text-base md:text-lg text-zinc-400 mt-8 space-y-2 font-mono">
-              <Typewriter
-                options={{
-                  strings: [''],
-                  autoStart: true,
-                  loop: false,
-                  delay: 50,
-                  cursor: ''
-                }}
-                onInit={(typewriter) => {
-                  typewriter
-                    .typeString('<del>DEADSTOOL</del>')
-                    .pauseFor(500)
-                    .typeString('\n???')
-                    .pauseFor(500)
-                    .typeString('\n???')
                     .start();
                 }}
               />
