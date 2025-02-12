@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Menu, Transition } from '@headlessui/react';
+import { Transition } from '@headlessui/react';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 
