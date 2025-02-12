@@ -399,7 +399,7 @@ function Home() {
                 <img 
                   src="/deadstool-stars.png"
                   alt="Deadstool" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain bg-[#141414]"
                   onError={handleImageError}
                 />
               </div>
