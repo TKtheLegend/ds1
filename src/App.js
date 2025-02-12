@@ -353,32 +353,31 @@ function Home() {
       {/* Coin Card */}
       <div className="w-full max-w-4xl px-4">
         <div className="bg-[#1a1a1a] rounded-lg border border-zinc-800 overflow-hidden">
-          <div className="grid grid-cols-1">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4">
             {/* Stats Section */}
             <div>
-              <h2 className="text-sm uppercase tracking-wider p-3 text-zinc-400 font-semibold border-b border-zinc-800">Live Stats</h2>
-              <div>
-                <div className="border-b border-zinc-800/50">
-                  <div className="flex justify-between items-center px-3 py-2.5">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">Price</h3>
+              <div className="p-4">
+                <img 
+                  src="/deadstool-stars.png"
+                  alt="Deadstool" 
+                  className="w-48 h-48 mx-auto rounded-lg mb-4"
+                />
+                <h2 className="text-2xl font-semibold tracking-wider text-center mb-4 text-zinc-200">$DEADSTOOL</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-[#141414] rounded p-3">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">Price</h3>
                     <p className="text-base tracking-wide font-light">{formatPrice(coinData.price)}</p>
                   </div>
-                </div>
-                <div className="border-b border-zinc-800/50">
-                  <div className="flex justify-between items-center px-3 py-2.5">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">Market Cap</h3>
+                  <div className="bg-[#141414] rounded p-3">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">Market Cap</h3>
                     <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.marketCap)}</p>
                   </div>
-                </div>
-                <div className="border-b border-zinc-800/50">
-                  <div className="flex justify-between items-center px-3 py-2.5">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">24h Volume</h3>
+                  <div className="bg-[#141414] rounded p-3">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">24h Volume</h3>
                     <p className="text-base tracking-wide font-light">{formatLargeNumber(coinData.volume24h)}</p>
                   </div>
-                </div>
-                <div>
-                  <div className="flex justify-between items-center px-3 py-2.5">
-                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500">24h Change</h3>
+                  <div className="bg-[#141414] rounded p-3">
+                    <h3 className="text-[11px] uppercase tracking-widest text-zinc-500 mb-1">24h Change</h3>
                     <p className={`text-base tracking-wide font-light ${coinData.priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                       {coinData.priceChange24h.toFixed(2)}%
                     </p>
