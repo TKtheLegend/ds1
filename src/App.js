@@ -42,17 +42,16 @@ function Home() {
 
   const formatPrice = (price) => {
     if (typeof price !== 'number' || isNaN(price)) return '$0.00';
-    if (price < 0.00001) {
-      return `$${price.toExponential(6)}`;
+    
+    // For very small numbers (less than 0.01), show more decimal places
+    if (price < 0.01) {
+      // Convert to string to avoid scientific notation
+      const priceStr = price.toFixed(9);
+      // Remove trailing zeros after decimal
+      return '$' + parseFloat(priceStr).toString();
     }
-    if (price < 1) {
-      return price.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 8,
-        maximumFractionDigits: 8
-      });
-    }
+    
+    // For regular numbers, use standard formatting
     return price.toLocaleString(undefined, {
       style: 'currency',
       currency: 'USD',
