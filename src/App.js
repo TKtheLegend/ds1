@@ -240,6 +240,7 @@ function Dashboard() {
 // Home Component
 function Home() {
   const [titleComplete, setTitleComplete] = useState(false);
+  const [subtitleComplete, setSubtitleComplete] = useState(false);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
@@ -273,6 +274,28 @@ function Home() {
                 delay: 50,
                 deleteSpeed: 9999999,
                 cursor: ''
+              }}
+              onInit={(typewriter) => {
+                typewriter
+                  .callFunction(() => {
+                    setSubtitleComplete(true);
+                  })
+                  .start();
+              }}
+            />
+          </div>
+        )}
+        {subtitleComplete && (
+          <div className="text-base md:text-lg text-zinc-400 space-y-2">
+            <Typewriter
+              options={{
+                strings: ['<s>DEADSTOOL</s>\n???\n???'],
+                autoStart: true,
+                loop: false,
+                delay: 50,
+                deleteSpeed: 9999999,
+                cursor: '',
+                wrapperClassName: 'whitespace-pre-line'
               }}
             />
           </div>
