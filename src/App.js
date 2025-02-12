@@ -19,7 +19,7 @@ function Home() {
     const fetchCoinData = async () => {
       try {
         const response = await axios.get(
-          `https://api.dexscreener.com/latest/dex/tokens/3cc8hXHqZdvsbvw5azbLdk4Rxse1KERtL4HaquDVpump`
+          `https://api.dexscreener.com/latest/dex/tokens/2MF1XwadG6EShbroYitXzydND5YjHkz6pGdFUKkepump`
         );
         const pairData = response.data.pairs?.[0];
         if (pairData) {
@@ -135,12 +135,12 @@ function Home() {
       <div className="flex flex-wrap justify-center gap-6 w-full px-4">
         {/* $WOLF Card */}
         <a 
-          className="w-full max-w-md transform transition-transform duration-300 hover:scale-105 cursor-pointer relative"
+          href="https://dexscreener.com/solana/2MF1XwadG6EShbroYitXzydND5YjHkz6pGdFUKkepump"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full max-w-md transform transition-transform duration-300 hover:scale-105 cursor-pointer"
         >
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-xl z-10 flex items-center justify-center">
-            <h2 className="text-2xl font-bold text-white tracking-wider">COMING SOON</h2>
-          </div>
-          <div className="bg-[#1a1a1a] rounded-lg border border-zinc-800 overflow-hidden animate-pulse-glow blur-lg">
+          <div className="bg-[#1a1a1a] rounded-lg border border-zinc-800 overflow-hidden animate-pulse-glow">
             <div className="flex items-center justify-between border-b border-zinc-800">
               <h2 className="text-sm uppercase tracking-wider px-3 py-2 text-zinc-400 font-semibold">Live Stats</h2>
               <h2 className="text-sm uppercase tracking-wider px-3 py-2 text-zinc-200 font-semibold">$WOLF (STOOLVERINE)</h2>
