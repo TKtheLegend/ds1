@@ -239,32 +239,22 @@ function Dashboard() {
 
 // Home Component
 function Home() {
-  const [titleComplete, setTitleComplete] = useState(false);
-  const [subtitleComplete, setSubtitleComplete] = useState(false);
-
   return (
     <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
-      <div className="text-center space-y-6">
-        <div className="text-2xl md:text-3xl font-bold text-white">
-          <Typewriter
-            options={{
-              strings: ['Welcome to Meme Syndicate'],
-              autoStart: true,
-              loop: false,
-              delay: 80,
-              deleteSpeed: 9999999,
-              cursor: ''
-            }}
-            onInit={(typewriter) => {
-              typewriter
-                .callFunction(() => {
-                  setTitleComplete(true);
-                })
-                .start();
-            }}
-          />
-        </div>
-        {titleComplete && (
+      <div className="text-center space-y-8">
+        <div className="space-y-6">
+          <div className="text-2xl md:text-3xl font-bold text-white">
+            <Typewriter
+              options={{
+                strings: ['Welcome to Meme Syndicate'],
+                autoStart: true,
+                loop: false,
+                delay: 80,
+                cursor: '',
+                pauseFor: 1000
+              }}
+            />
+          </div>
           <div className="text-lg md:text-xl text-zinc-300">
             <Typewriter
               options={{
@@ -272,34 +262,27 @@ function Home() {
                 autoStart: true,
                 loop: false,
                 delay: 50,
-                deleteSpeed: 9999999,
-                cursor: ''
-              }}
-              onInit={(typewriter) => {
-                typewriter
-                  .callFunction(() => {
-                    setSubtitleComplete(true);
-                  })
-                  .start();
+                cursor: '',
+                pauseFor: 1500
               }}
             />
           </div>
-        )}
-        {subtitleComplete && (
-          <div className="text-base md:text-lg text-zinc-400 space-y-2">
+          <div className="text-base md:text-lg text-zinc-400 mt-8 space-y-2 font-mono">
             <Typewriter
               options={{
-                strings: ['<s>DEADSTOOL</s>\n???\n???'],
+                strings: [
+                  '<del>DEADSTOOL</del>\n???\n???'
+                ],
                 autoStart: true,
                 loop: false,
                 delay: 50,
-                deleteSpeed: 9999999,
                 cursor: '',
+                pauseFor: 2000,
                 wrapperClassName: 'whitespace-pre-line'
               }}
             />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
