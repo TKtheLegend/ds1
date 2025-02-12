@@ -239,6 +239,9 @@ function Dashboard() {
 
 // Home Component
 function Home() {
+  const [showSubtitle, setShowSubtitle] = useState(false);
+  const [showList, setShowList] = useState(false);
+
   return (
     <div className="min-h-screen bg-black flex items-center justify-center -mt-16">
       <div className="text-center space-y-8">
@@ -250,38 +253,61 @@ function Home() {
                 autoStart: true,
                 loop: false,
                 delay: 80,
-                cursor: '',
-                pauseFor: 1000
+                cursor: ''
+              }}
+              onInit={(typewriter) => {
+                typewriter
+                  .typeString('Welcome to Meme Syndicate')
+                  .callFunction(() => {
+                    setShowSubtitle(true);
+                  })
+                  .start();
               }}
             />
           </div>
-          <div className="text-lg md:text-xl text-zinc-300">
-            <Typewriter
-              options={{
-                strings: ['the first-ever meme media launchpad'],
-                autoStart: true,
-                loop: false,
-                delay: 50,
-                cursor: '',
-                pauseFor: 1500
-              }}
-            />
-          </div>
-          <div className="text-base md:text-lg text-zinc-400 mt-8 space-y-2 font-mono">
-            <Typewriter
-              options={{
-                strings: [
-                  '<del>DEADSTOOL</del>\n???\n???'
-                ],
-                autoStart: true,
-                loop: false,
-                delay: 50,
-                cursor: '',
-                pauseFor: 2000,
-                wrapperClassName: 'whitespace-pre-line'
-              }}
-            />
-          </div>
+          {showSubtitle && (
+            <div className="text-lg md:text-xl text-zinc-300">
+              <Typewriter
+                options={{
+                  strings: ['the first-ever meme media launchpad'],
+                  autoStart: true,
+                  loop: false,
+                  delay: 50,
+                  cursor: ''
+                }}
+                onInit={(typewriter) => {
+                  typewriter
+                    .typeString('the first-ever meme media launchpad')
+                    .callFunction(() => {
+                      setShowList(true);
+                    })
+                    .start();
+                }}
+              />
+            </div>
+          )}
+          {showList && (
+            <div className="text-base md:text-lg text-zinc-400 mt-8 space-y-2 font-mono">
+              <Typewriter
+                options={{
+                  strings: [''],
+                  autoStart: true,
+                  loop: false,
+                  delay: 50,
+                  cursor: ''
+                }}
+                onInit={(typewriter) => {
+                  typewriter
+                    .typeString('<del>DEADSTOOL</del>')
+                    .pauseFor(500)
+                    .typeString('\n???')
+                    .pauseFor(500)
+                    .typeString('\n???')
+                    .start();
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
