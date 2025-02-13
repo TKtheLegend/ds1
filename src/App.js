@@ -32,7 +32,7 @@ function Home() {
           setWolfData({
             price: parseFloat(wolfPairData.priceUsd) || 0,
             marketCap: parseFloat(wolfPairData.fdv) || 0,
-            volume24h: parseFloat(wolfPairData.volume.h24) || 0,
+            volume24h: parseFloat(wolfPairData.volume.total) || 0,
             priceChange24h: parseFloat(wolfPairData.priceChange.h24) || 0
           });
         }
@@ -46,7 +46,7 @@ function Home() {
           setDeadstoolData({
             price: parseFloat(deadstoolPairData.priceUsd) || 0,
             marketCap: parseFloat(deadstoolPairData.fdv) || 0,
-            volume24h: parseFloat(deadstoolPairData.volume.h24) || 0,
+            volume24h: parseFloat(deadstoolPairData.volume.total) || 0,
             priceChange24h: parseFloat(deadstoolPairData.priceChange.h24) || 0
           });
         }
